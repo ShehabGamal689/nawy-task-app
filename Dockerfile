@@ -1,11 +1,20 @@
 FROM node:18-alpine AS builder
-WORKDIR /app
+
+WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
+RUN npm run lint
+
 
 FROM node:18-alpine
-WORKDIR /app
-COPY --from=builder /app .
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+
+RUN npm install --only=production
+COPY --from=builder /usr/src/app .
+
 EXPOSE 3000
+
 CMD ["npm", "start"]
