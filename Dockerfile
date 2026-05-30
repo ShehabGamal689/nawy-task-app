@@ -11,7 +11,6 @@ WORKDIR /usr/src/app
 ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm install --only=production && npm cache clean --force
-COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/index.js ./ 
 
 USER node
